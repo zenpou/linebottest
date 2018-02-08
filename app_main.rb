@@ -14,7 +14,8 @@ def post_chatwork_api(message)
   request = Net::HTTP::Post.new(uri.request_uri)
   request.add_field "X-ChatWorkToken", ENV["CHATWORK_API_KEY"]
   request.set_form_data :body => message
-  https.request(request)
+  response = https.request(request)
+  puts response.body
 end
 
 def client
