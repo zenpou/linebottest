@@ -1,7 +1,6 @@
 require 'sinatra'
 require 'line/bot'
-require 'sinatra'
-require 'line/bot'
+require 'net/https'
 
 # 微小変更部分！確認用。
 get '/' do
