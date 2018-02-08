@@ -54,6 +54,7 @@ post '/callback' do
         user_name = user_name(event["source"]["userId"]) rescue nil
         post_chatwork_api(user_name + ":" + event.message['text'])
       when Line::Bot::Event::MessageType::Image, Line::Bot::Event::MessageType::Video
+        post_chatwork_api("LINEに画像、動画が追加されました。")
       end
     end
   }
