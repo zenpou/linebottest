@@ -25,6 +25,17 @@ def client
   }
 end
 
+def user_name(user_id)
+  response = client.get_profile(user_id)
+  case response
+  when Net::HTTPSuccess then
+    contact = JSON.parse(response.body)
+    return contact['displayName']
+  else
+  end
+  return "名前取得エラー"
+end
+
 post '/callback' do
   body = request.body.read
 
@@ -39,7 +50,7 @@ post '/callback' do
     when Line::Bot::Event::Message
       case event.type
       when Line::Bot::Event::MessageType::Text
-        p event
+        p event.source["userId"]
         post_chatwork_api(event.message['text'])
       when Line::Bot::Event::MessageType::Image, Line::Bot::Event::MessageType::Video
       end
