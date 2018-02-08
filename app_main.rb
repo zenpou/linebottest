@@ -50,7 +50,8 @@ post '/callback' do
     when Line::Bot::Event::Message
       case event.type
       when Line::Bot::Event::MessageType::Text
-        p event.source["userId"]
+        p event.public_methods
+        p event.userId
         post_chatwork_api(event.message['text'])
       when Line::Bot::Event::MessageType::Image, Line::Bot::Event::MessageType::Video
       end
