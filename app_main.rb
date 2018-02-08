@@ -39,6 +39,7 @@ post '/callback' do
     when Line::Bot::Event::Message
       case event.type
       when Line::Bot::Event::MessageType::Text
+        puts event.message['text']
         post_chatwork_api(event.message['text'])
 #         message = {
 #           type: 'text',
