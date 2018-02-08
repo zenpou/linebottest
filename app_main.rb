@@ -51,7 +51,7 @@ post '/callback' do
       case event.type
       when Line::Bot::Event::MessageType::Text
         p event.public_methods
-        p event.userId
+        p event.message
         post_chatwork_api(event.message['text'])
       when Line::Bot::Event::MessageType::Image, Line::Bot::Event::MessageType::Video
       end
