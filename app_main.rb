@@ -7,6 +7,16 @@ require 'line/bot'
 get '/' do
   "Hello world"
 end
+def post_chatwork_api(message)
+  url = "https://api.chatwork.com/v2/rooms/#{ENV["CHATWORK_ROOM_ID"]}/messages"
+  uri = URI.parse(url)
+  https = Net::HTTP.new(uri.host, uri.port)
+  https.use_ssl = true # HTTPSでよろしく
+  request = Net::HTTP::Post.new(uri.request_uri)
+  request.add_field "X-ChatWorkToken", ENV["CHATWORK_API_KEY"]
+  request.set_form_data :body => message
+  https.request(request)
+end
 
 def client
   @client ||= Line::Bot::Client.new { |config|
@@ -29,15 +39,16 @@ post '/callback' do
     when Line::Bot::Event::Message
       case event.type
       when Line::Bot::Event::MessageType::Text
-        message = {
-          type: 'text',
-          text: event.message['text']
-        }
-        client.reply_message(event['replyToken'], message)
+        post_chatwork_api(event.message['text'])
+#         message = {
+#           type: 'text',
+#           text: event.message['text']
+#         }
+#         client.reply_message(event['replyToken'], message)
       when Line::Bot::Event::MessageType::Image, Line::Bot::Event::MessageType::Video
-        response = client.get_message_content(event.message['id'])
-        tf = Tempfile.open("content")
-        tf.write(response.body)
+#         response = client.get_message_content(event.message['id'])
+#         tf = Tempfile.open("content")
+#         tf.write(response.body)
       end
     end
   }
