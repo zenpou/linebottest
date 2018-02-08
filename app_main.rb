@@ -50,8 +50,9 @@ post '/callback' do
     when Line::Bot::Event::Message
       case event.type
       when Line::Bot::Event::MessageType::Text
-        p event["source"]
-        post_chatwork_api(event.message['text'])
+        user_name = "名前取得エラー"
+        user_name = user_name(event["source"]["userId"]) rescue nil
+        post_chatwork_api(user_name + ":" + event.message['text'])
       when Line::Bot::Event::MessageType::Image, Line::Bot::Event::MessageType::Video
       end
     end
