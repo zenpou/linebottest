@@ -25,8 +25,14 @@ def client
   }
 end
 
-def user_name(user_id)
-  response = client.get_profile(user_id)
+def user_name(user_id, group_id)
+  response = nil
+  if group_id.nil? || ( group_id.strip.length == 0 )
+    response = client.get_profile(user_id)
+  else
+    end_point = "/bot/group/#{group_id}/member/#{user_id}"
+    response = client.get(end_point)
+  end
   case response
   when Net::HTTPSuccess then
     contact = JSON.parse(response.body)
@@ -52,7 +58,7 @@ post '/callback' do
       case event.type
       when Line::Bot::Event::MessageType::Text
         user_name = "名前取得エラー"
-        user_name = user_name(event["source"]["userId"]) rescue nil
+        user_name = user_name(event["source"]["userId"], event["source"]["groupId"]) rescue nil
         post_chatwork_api(user_name + ":" + event.message['text'])
       when Line::Bot::Event::MessageType::Image, Line::Bot::Event::MessageType::Video
         post_chatwork_api("LINEに画像、動画が追加されました。")
